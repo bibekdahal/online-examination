@@ -1,13 +1,14 @@
 <?php
 
-require_once('Page.php');
+require_once 'Pages.php';
 
 
-$mainPage = new Page;
 $mainPage->StartHead("Test Page");
 $mainPage->EndHead();
 $mainPage->StartBody();
-echo 'Hello World';
+echo 'Hello World!';
 $mainPage->EndBody();
+
+
 
 ?>
