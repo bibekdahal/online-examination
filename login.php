@@ -1,7 +1,17 @@
 <?php
 require_once 'Pages.php';
+$loginError = false;
+$user -> StartSession();
 
-$user->GetSession()->Start();
+if (isset($_POST['un'], $_POST['psss'])) {
+	$username = $_POST['un'];
+	$password = $_POST['psss'];
+	if ($user -> login($username, $password) == true) {
+	} else {
+		$loginError = true;
+	}
+}
+
 $loginPage -> StartHead("Log in");
 ?>
 
@@ -11,25 +21,53 @@ $loginPage -> StartHead("Log in");
 <meta name="description" content="">
 <meta name="author" content="">
 
-<?php 
-$loginPage->StartHead("Log in");
-$loginPage->AddStyleSheet("css/signin.css");
-$loginPage->Endhead();
-$loginPage->StartBody();
+<?php $loginPage -> StartHead("Log in");
+	$loginPage -> AddStyleSheet("css/signin.css");
+	$loginPage -> Endhead();
+	$loginPage -> StartBody();
 
-//---------------------------- Start of Body --------------------------------
+	//---------------------------- Start of Body --------------------------------
 ?>
-    <div class="container">
-      <form class="form-signin" role="form">
-        <h2 class="form-signin-heading">Please sign in</h2>
-        <input type="number" pattern="[0-9]*" class="form-control" placeholder="Roll Number" required autofocus>
-        <input type="password" class="form-control" placeholder="Password" required>
-        <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
-      </form>
-    </form>
+<div class="container">
+	<?php
+	if ($loginError == TRUE) {
+		echo '
+<div class="alert alert-danger alert-dismissable">
+<button type="button" class="close" data-dismiss="alert" aria-hidden="true">
+&times;
+</button>
+<strong>Oh nose!</strong> Can\'t remember you, sorry for that. 
+</div>';
+	}
+	?>
+
+	<form class="form-signin" action="login.php" method="post" role="form">
+		<h2 class="form-signin-heading">Log in</h2>
+		<input type="text"  name="un" class="form-control" placeholder="Username" required autofocus>
+		<input type="password" name="pwd" class="form-control" placeholder="Password" required>
+		</br>
+		<button class="btn btn-lg btn-primary btn-block" type="submit" onclick="formhash(this.form, this.form.pwd);">
+			Sign in
+		</button>
+		<div class = "form-bttmtext">
+			<p>
+				If you are done, please <a href="logout.php">log out</a>.
+			</p>
+			<p>
+				<?php
+					if($user->loggedin()) echo 'Current Status: Logged in'; 
+					else echo 'Current Status: Not logged in';
+				?>
+			</p>
+		</div>
+
+	</form>
+
 </div>
 
 <?php
 //----------------------------- Body Ends -----------------------------------
-$loginPage->EndBody();
+$loginPage -> AddScript("js/sha512.js");
+$loginPage -> AddScript("js/forms.js");
+$loginPage -> EndBody();
 ?>
