@@ -1,4 +1,9 @@
 <?php
+
+// Login Test User
+// Username: test_user
+// Password: 6ZaxN2Vzm9NUJT2y
+
 require_once 'Pages.php';
 $loginError = false;
 $user -> StartSession();
