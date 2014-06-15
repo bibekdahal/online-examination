@@ -4,26 +4,26 @@ class Session {
 	private $m_sessionName;
 	private $m_secure;
 	private $m_httpOnly;
-	function __construct() {
-		$m_sessionName = 'sec_session';
-		$m_secure = true;
-		$m_httpOnly = true;
+	public function __construct() {
+		$this->m_sessionName = 'sec_session';
+		$this->m_secure = true;
+		$this->m_httpOnly = true;
 	}
-
-	function Start() {
+	
+	public function Start() {
 		if (ini_set('session.use_only_cookies', 1) === false) {
 			throw "can't initiate a safe session";
 		}
 		$cookieParams = session_get_cookie_params();
-		session_set_cookie_params($cookieParams["lifetime"], $cookieParams["path"], $cookieParams["domain"], $m_secure, $m_httpOnly);
-		session_name($m_sessionNname);
+		session_set_cookie_params($cookieParams["lifetime"], $cookieParams["path"], $cookieParams["domain"], $this->m_secure, $this->m_httpOnly);
+		session_name($this->m_sessionName);
 		session_start();
 		// Start the PHP session
 		session_regenerate_id();
 		// regenerated the session, delete the old one.
 	}
 
-	function login_check($mysqli) {
+	public function login_check($mysqli) {
 		if (isset($_SESSION['user_id'], $_SESSION['username'], $_SESSION['login_string'])) {
 			$user_id = $_SESSION['user_id'];
 			$login_string = $_SESSION['login_string'];
