@@ -44,10 +44,6 @@ What is <img src="test-images/image0.png" />?<br/>
 			if ($j==1 || $j==3)
 			echo '</div>';
 		}
-		
-		echo '	  </div>
-				</div>
-		';
 	}
 ?>
 	</form>
