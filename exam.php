@@ -35,7 +35,7 @@ What is <img src="test-images/image0.png" />?<br/>
 			 	<div class="col-md-6">
 					<div class="radio">
 					  <label>
-					    <input type="radio" name="optionsRadios'.$i.'" value="option'.($i*4+$j).'" '.(($j==0)?'checked':'').'>
+					    <input type="radio" name="optionsRadios'.$i.'" value="option'.($i*4+$j).'" '.''.'>
 					    Option '.($j+1).'
 					  </label>
 					</div>
@@ -44,8 +44,12 @@ What is <img src="test-images/image0.png" />?<br/>
 			if ($j==1 || $j==3)
 			echo '</div>';
 		}
+		echo '</div>';
+		echo '</div>';
+		//echo '<br/>';
 	}
 ?>
+
 	</form>
 </div>
 
