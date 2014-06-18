@@ -1,70 +1,202 @@
 <?php
 
-define("HOST", "localhost");
-define("USER", "root");
-define("PASSWORD", "");
-define("DATABASE", "frobi-online-examination");
+if (!defined("HOST")){
+	define("HOST", "localhost");
+	define("USER", "root");
+	define("PASSWORD", "");
+	define("DATABASE", "frobi-online-examination");
+}
+
 
 class Questions{
 	private $m_sqli;	
 	private $m_lastSetId;
+	private $imageroot;
 	
 	public function __construct(){		
 		$this->m_sqli = new mysqli(HOST, USER, PASSWORD, DATABASE);
 		if ($this->m_sqli->connect_error)
 			trigger_error('Connect Error: ' . $this->m_sqli->connect_error);
-		$this->m_sqli->query('CREATE TABLE IF NOT EXISTS question_sets(setid int auto_increment, tablename varchar(100), primary key(setid))');
+		$this->imageroot = $_SERVER['DOCUMENT_ROOT'].'online-examination\\images\\';
 	}
 	
 	public function __destruct(){
 		$this->m_sqli->close();
 	}
-	
-	public function NewQuestionSet(int $numberOfQuestions){
+			
+	public function NewQuestionSet($imagefolder){
 		$mysqli = $this->m_sqli;
-		
-		if ($result = $mysqli->query('SELECT * FROM question_sets')){
-			$nsets = $result->num_rows;
-			$newname = "question".$nsets;
-			if ($res = $mysqli->query('CREATE TABLE '.$newname.'(id int auto_increment, question mediumtext, optiona mediumtext, optionb mediumtext, optionc mediumtext, optiond mediumtext, primary key(id))')){
-				for ($i=0; $i<$numberOfQuestions; $i++)
-					$mysqli->query('INSERT INTO '.$newname.' VALUES('.($i+1).', " ", " ", " ", " ")');
-				
-				if ($stmt1 = $mysqli->prepare('INSERT INTO question_sets(tablename) VALUES(?)')){
-					$stmt1->bind_param('s', $newname);
-					$stmt1->execute();
-					$stmt1->close();
-				}
-				$this->m_lastSetId = $stmt->insert_id;
-				
-				$res->close();
-			}
-			$result->close();
+
+		if ($stmt = $mysqli->prepare('INSERT INTO question_sets(imagesfolder) VALUES(?)')){
+			$stmt->bind_param('s', $imagefolder);
+			$stmt->execute();				
+			$this->m_lastSetId = $stmt->insert_id;
+			$stmt->close();	
 		}
+		mkdir($this->imageroot.$imagefolder);
 	}
 	
-	public function UpdateQuestion(int $setIndex, int $questionIndex, 
-	string $question, string $optiona, string $optionb, string $optionc, string $optiond){
+	public function GetLastSetId() { return $this->m_lastSetId; }
+	public function GetNumSets()
+	{
 		$mysqli = $this->m_sqli;
-				
-		if ($stmt = $mysqli->prepare('SELECT tablename FROM question_sets WHERE setid=?')){
-			$stmt->bind_param('i', $setIndex);
-			$stmt->excute();
-			$stmt->bind_result($tablename);
-			
+		if ($res=$mysqli->query('SELECT * FROM question_sets')){
+			return $res->num_rows;
+			$res->close();
+		}
+		return 0;
+	}
+	public function GetNumQuestions($setid)
+	{
+		$nqns=0;
+		$mysqli = $this->m_sqli;
+		if ($stmt=$mysqli->prepare('SELECT * FROM questions WHERE setid=?')){
+			$stmt->bind_param('i', $setid);
+			$stmt->execute(); 
+			$stmt->store_result();
+			$nqns = $stmt->num_rows;
+			$stmt->close();
+		}
+		return $nqns;
+	}
+	public function EchoQuestion($setid, $qsn)
+	{
+		$mysqli = $this->m_sqli;;
+		if ($stmt=$mysqli->prepare('SELECT question FROM questions WHERE setid=? AND sn=?')){
+			$stmt->bind_param('ii', $setid, $qsn);
+			$stmt->execute(); 
+			$stmt->store_result();
+			$stmt->bind_result($question);
 			if ($stmt->fetch())
-			{
-				if ($stmt1 = $mysqli->prepare('UPDATE '.$tablename.' SET question=?,optiona=?,optionb=?,optionc=?,optiond=? WHERE id=?'))
-				{
-					$stmt1->bind_param('sssssi', $question, $optiona, $optionb, $optionc, $optiond, $questionIndex);
-					$stmt1->execute();
-					$stmt1->close();
-				}
-			}
-			
+				echo $question;
 			$stmt->close();
 		}
 	}
+	public function EchoOpta($setid, $qsn)
+	{
+		$mysqli = $this->m_sqli;;
+		if ($stmt=$mysqli->prepare('SELECT optiona FROM questions WHERE setid=? AND sn=?')){
+			$stmt->bind_param('ii', $setid, $qsn);
+			$stmt->execute(); 
+			$stmt->store_result();
+			$stmt->bind_result($optiona);
+			if ($stmt->fetch())
+				echo $optiona;
+			$stmt->close();
+		}
+	}
+	public function EchoOptb($setid, $qsn)
+	{
+		$mysqli = $this->m_sqli;;
+		if ($stmt=$mysqli->prepare('SELECT optionb FROM questions WHERE setid=? AND sn=?')){
+			$stmt->bind_param('ii', $setid, $qsn);
+			$stmt->execute(); 
+			$stmt->store_result();
+			$stmt->bind_result($optionb);
+			if ($stmt->fetch())
+				echo $optionb;
+			$stmt->close();
+		}
+	}
+	public function EchoOptc($setid, $qsn)
+	{
+		$mysqli = $this->m_sqli;;
+		if ($stmt=$mysqli->prepare('SELECT optionc FROM questions WHERE setid=? AND sn=?')){
+			$stmt->bind_param('ii', $setid, $qsn);
+			$stmt->execute(); 
+			$stmt->store_result();
+			$stmt->bind_result($optionc);
+			if ($stmt->fetch())
+				echo $optionc;
+			$stmt->close();
+		}
+	}
+	public function EchoOptd($setid, $qsn)
+	{
+		$mysqli = $this->m_sqli;;
+		if ($stmt=$mysqli->prepare('SELECT optiond FROM questions WHERE setid=? AND sn=?')){
+			$stmt->bind_param('ii', $setid, $qsn);
+			$stmt->execute(); 
+			$stmt->store_result();
+			$stmt->bind_result($optiond);
+			if ($stmt->fetch())
+				echo $optiond;
+			$stmt->close();
+		}
+	}
+	
+	public function GetQuestion($setid, $qsn, &$question, &$optiona, &$optionb, &$optionc, &$optiond){
+		$mysqli = $this->m_sqli;
+		if ($stmt=$mysqli->prepare('SELECT question, optiona, optionb, optionc, optiond FROM questions WHERE setid=? AND sn=?')){
+			$stmt->bind_param('ii', $setid, $qsn);
+			$stmt->execute(); 
+			$stmt->store_result();
+			$stmt->bind_result($q, $oa, $ob, $oc, $od);
+			if ($stmt->fetch()){
+				$question=$q;
+				$optiona=$oa;
+				$optionb=$ob;
+				$optionc=$oc;
+				$optiond=$od;
+			}
+			$stmt->close();
+		}
+	}
+	
+	public function AddQuestion($setid, $sn, $question, $optiona, $optionb, $optionc, $optiond){
+		$mysqli = $this->m_sqli;
+
+		if ($stmt = $mysqli->prepare('INSERT INTO questions(setid, sn, question, optiona, optionb, optionc, optiond) VALUES(?, ?, ?, ?, ?, ?, ?)')){
+			$stmt->bind_param('iisssss', $setid, $sn, $question, $optiona, $optionb, $optionc, $optiond);
+			$stmt->execute();				
+			$stmt->close();	
+		}
+	}
+	
+	public function UpdateQuestion($setid, $sn, $question, $optiona, $optionb, $optionc, $optiond){
+		$mysqli = $this->m_sqli;
+				
+		if ($stmt = $mysqli->prepare('UPDATE questions SET question=?, optiona=?, optionb=?, optionc=?, optiond=? WHERE setid=? AND $sn=?')){
+			$stmt->bind_param('sssssii', $question, $optiona, $optionb, $optionc, $optiond, $setid, $sn);
+			$stmt->execute();
+			$stmt->close();
+		}
+	}
+	
+	
+	public function DeleteImages($setid, $qsn) {
+		$mysqli = $this->m_sqli;
+		
+		if ($stmt = $mysqli->prepare('SELECT imagesfolder FROM question_sets WHERE setid=?')){
+			$stmt->bind_param('i', $setid);
+			$stmt->execute();
+			$stmt->store_result();
+			$stmt->bind_result($imagesfolder);
+			if ($stmt->fetch()){
+				foreach (glob($this->imageroot.$imagesfolder.'\\'.$qsn.'x*.png') as $filename) {
+				   unlink($filename);
+				}				
+			}
+			$stmt->close();
+		}
+	}
+	
+	public function AddUploadedImage($setid){
+		$mysqli = $this->m_sqli;
+		
+		if ($stmt = $mysqli->prepare('SELECT imagesfolder FROM question_sets WHERE setid=?')){
+			$stmt->bind_param('i', $setid);
+			$stmt->execute();
+			$stmt->store_result();
+			$stmt->bind_result($imagesfolder);
+			if ($stmt->fetch()){
+				$uploadfile = $this->imageroot.$imagesfolder."\\".basename($_FILES['file']['name']);
+		        move_uploaded_file($_FILES['file']['tmp_name'], $uploadfile);
+			}
+			$stmt->close();
+		}
+	}
+	
 }
 
 ?>
