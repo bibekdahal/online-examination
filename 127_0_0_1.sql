@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Jun 17, 2014 at 12:35 PM
+-- Generation Time: Jun 18, 2014 at 02:04 PM
 -- Server version: 5.6.17
 -- PHP Version: 5.5.12
 
@@ -59,7 +59,14 @@ CREATE TABLE IF NOT EXISTS `question_sets` (
   `setid` int(11) NOT NULL AUTO_INCREMENT,
   `imagesfolder` varchar(100) NOT NULL,
   PRIMARY KEY (`setid`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=2 ;
+
+--
+-- Dumping data for table `question_sets`
+--
+
+INSERT INTO `question_sets` (`setid`, `imagesfolder`) VALUES
+(1, '1acnsj');
 
 -- --------------------------------------------------------
 
@@ -78,7 +85,15 @@ CREATE TABLE IF NOT EXISTS `questions` (
   `optiond` mediumtext NOT NULL,
   PRIMARY KEY (`qid`),
   KEY `setid` (`setid`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=3 ;
+
+--
+-- Dumping data for table `questions`
+--
+
+INSERT INTO `questions` (`qid`, `setid`, `sn`, `question`, `optiona`, `optionb`, `optionc`, `optiond`) VALUES
+(1, 1, 1, 'HELLO?', 'WORLD', 'NOT WORLD', 'BOLD', 'NOT BOLD'),
+(2, 1, 2, 'What is <img src="images/1acnsj/2x0.png" />?<br/>', 'TEST', 'sdajhasdj', 'jcxmv', 'qw[e;');
 
 -- --------------------------------------------------------
 
