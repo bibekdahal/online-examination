@@ -42,7 +42,6 @@ class Questions{
 		$mysqli = $this->m_sqli;
 		if ($res=$mysqli->query('SELECT * FROM question_sets')){
 			return $res->num_rows;
-			$res->close();
 		}
 		return 0;
 	}
@@ -257,6 +256,15 @@ class Questions{
 		return -1;	
 	}
 	
+	public function StartExam(){
+		$mysqli = $this->m_sqli;
+		
+		date_default_timezone_set("Asia/Kathmandu");
+		$time = date( 'Y-m-d H:i:s',time());
+		if ($res = $mysqli->query('UPDATE users SET exam_start_time ="'.$time.'"')){
+			echo $time;
+		}
+	}
 }
 
 ?>

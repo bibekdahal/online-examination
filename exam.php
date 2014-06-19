@@ -1,42 +1,50 @@
 <?php
 require_once 'Pages.php';
 require_once('classes/Questions.php');
-$questions = new Questions;
-
 $loginPage->StartHead('Online Exam');
+
 ?>
 
 <?php
 $loginPage->Endhead();
 $loginPage->StartBody();
 
-$setid = 1;
-$userid = 1;
 
-$num = $questions->GetNumQuestions($setid);
-$submitted = false;
-for ($i=0; $i<$num; $i++)
-	if (isset($_POST['optionsRadios'.$i])){
-		$questions->AddAnswer($userid, $setid, $i+1, intval($_POST['optionsRadios'.$i]));
-		$submitted=true;
-	}
-	
-if ($submitted) {
-	echo '
-	<div class="container">
-		<h1>Your answers are submitted.</h1>
-	</div>
-	';
-	exit(0);
-}
+$questions = new Questions;
 //---------------------------- Start of Body --------------------------------
 ?>
-
+	<div class="navbar navbar-default navbar-fixed-top" role="navigation">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <div class="navbar-brand">Online Examination</div>
+        </div>
+        <div class="navbar-collapse collapse">
+          <ul class="nav navbar-nav">
+            <li><a href="#">Instruction</a></li>            
+            <li><a href="exam.php">Exam Page</a></li>
+          </ul>
+          <ul class="nav navbar-nav navbar-right">
+            <li><a id="timer" href="#"></a></li>
+            <li class="active"><a href="./">Log Out</a></li>
+          </ul>
+        </div><!--/.nav-collapse -->
+      </div>
+    </div>
+    
+    
 <div class="container">
-	<h1>Online Exam</h1>
 	<br/><br/>
 	<form method="post" role="form">
+		
 <?php
+
+
+		
 	if($user->loggedin()){
 		try{
 			if($user->ExamStarted()){
@@ -55,7 +63,28 @@ if ($submitted) {
 		echo 'Current Status: Not logged in, please <a href="login.php">log in</a> first';
 		return;
 	}
-	$num = $questions->GetNumQuestions(1);
+	$endtime = $user->GetStartTime() + 10800;
+	
+	$num = $questions->GetNumQuestions(1);		
+	$setid = 1;
+	$userid = $_SESSION['user_id'];
+	
+	$submitted = false;
+	for ($i=0; $i<$num; $i++)
+		if (isset($_POST['optionsRadios'.$i])){
+			$questions->AddAnswer($userid, $setid, $i+1, intval($_POST['optionsRadios'.$i]));
+			$submitted=true;
+		}
+		
+	if ($submitted) {
+		echo '
+		<div class="container">
+			<h1>Your answers are submitted.</h1>
+		</div>
+		';
+		return;
+	}
+
 	for ($i=0; $i<$num; $i++)
 	{
 		$questions->GetQuestion($setid, $i+1, $q, $o[0], $o[1], $o[2], $o[3]);
@@ -101,7 +130,24 @@ $loginPage->EndBody();
 
 <script type="text/javascript">
 
+var TimeLimit = new Date('<?php echo date('r', $endtime) ?>');
+function countdownto() {
+	  var date = Math.round((TimeLimit-new Date())/1000);
+	  var hours = Math.floor(date/3600);
+	  date = date - (hours*3600);
+	  var mins = Math.floor(date/60);
+	  date = date - (mins*60);
+	  var secs = date;
+	  if (hours<10) hours = '0'+hours;
+	  if (mins<10) mins = '0'+mins;
+	  if (secs<10) secs = '0'+secs;
+	  $("#timer").html(hours+':'+mins+':'+secs);
+	  setTimeout("countdownto()",1000);
+ }
+
+
 $(document).ready(function() {
+	countdownto();
 	<?php
 	for ($i=0; $i<$num; $i++)
 	echo '$(\'input[name="optionsRadios'.$i.'"]\').change( function() {$(this).closest(".panel-body").css( "background-color", "#cdc" ); var j = parseInt($(this).val()); answer('.($i+1).', j);});';
