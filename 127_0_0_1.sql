@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 4.0.4.1
+-- version 4.1.14
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Jun 19, 2014 at 10:43 AM
--- Server version: 5.5.32
--- PHP Version: 5.4.16
+-- Generation Time: Jun 19, 2014 at 12:34 PM
+-- Server version: 5.6.17
+-- PHP Version: 5.5.12
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
@@ -21,6 +21,31 @@ SET time_zone = "+00:00";
 --
 CREATE DATABASE IF NOT EXISTS `frobi-online-examination` DEFAULT CHARACTER SET latin1 COLLATE latin1_swedish_ci;
 USE `frobi-online-examination`;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `answers`
+--
+
+CREATE TABLE IF NOT EXISTS `answers` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `userid` int(11) NOT NULL,
+  `qid` int(11) NOT NULL,
+  `ans` int(11) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `userid` (`userid`,`qid`),
+  KEY `userid_2` (`userid`),
+  KEY `qid` (`qid`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=3 ;
+
+--
+-- Dumping data for table `answers`
+--
+
+INSERT INTO `answers` (`id`, `userid`, `qid`, `ans`) VALUES
+(1, 1, 1, 1),
+(2, 1, 2, 0);
 
 -- --------------------------------------------------------
 
@@ -47,7 +72,8 @@ INSERT INTO `login_attempts` (`user_id`, `time`) VALUES
 (1, '1402916307'),
 (1, '1402916311'),
 (1, '1402916314'),
-(1, '1402916318');
+(1, '1402916318'),
+(1, '1403170006');
 
 -- --------------------------------------------------------
 
@@ -129,6 +155,13 @@ INSERT INTO `users` (`id`, `username`, `email`, `password`, `salt`, `question_se
 --
 -- Constraints for dumped tables
 --
+
+--
+-- Constraints for table `answers`
+--
+ALTER TABLE `answers`
+  ADD CONSTRAINT `answers_ibfk_2` FOREIGN KEY (`qid`) REFERENCES `questions` (`qid`),
+  ADD CONSTRAINT `answers_ibfk_1` FOREIGN KEY (`userid`) REFERENCES `users` (`id`);
 
 --
 -- Constraints for table `questions`
