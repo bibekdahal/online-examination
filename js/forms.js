@@ -18,12 +18,15 @@ function formhash(form, password) {
     //form.submit();
 }
  
-function regformhash(form, uid, email, password, conf) {
+function regformhash(form, uid, password, conf, qid, date, time) {
      // Check each field has a value
     if (uid.value == ''         || 
-          email.value == ''     || 
           password.value == ''  || 
-          conf.value == '') {
+          conf.value == '' ||
+		  qid.value == '' ||
+		  date.value == '' || 
+		  time.value == ''
+		  ) {
  
         alert('You must provide all the requested details. Please try again');
         return false;

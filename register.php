@@ -2,7 +2,7 @@
 
 $error_msg = "";
  
-if (isset($_POST['username'], $_POST['email'], $_POST['p'])) {
+if (isset($_POST['username'], $_POST['p'])) {
     // Sanitize and validate the data passed in
     $username = filter_input(INPUT_POST, 'username', FILTER_SANITIZE_STRING);
     $email = filter_input(INPUT_POST, 'email', FILTER_SANITIZE_EMAIL);
@@ -127,26 +127,37 @@ function esc_url($url) {
 <html>
     <head>
         <meta charset="UTF-8">
-        <title>Secure Login: Registration Form</title>
+        <title>Online Examination - Registration</title>
         <script type="text/JavaScript" src="js/sha512.js"></script> 
         <script type="text/JavaScript" src="js/forms.js"></script>
         <link rel="stylesheet" href="css/bootstrap.min.css" />
+		<link rel="stylesheet" href="css/register.css" />
 		<script type="text/JavaScript" src="js/jquery.min.js"></script>
 		<script type="text/JavaScript" src="js/bootstrap.min.js"></script>
 		
     </head>
     <body>
-	<div class="container">
+	<div class="container" >
+	<?php
+        if (!empty($error_msg)) {
+		echo '
+<div class="alert alert-danger alert-dismissable">
+<button type="button" class="close" data-dismiss="alert" aria-hidden="true">
+&times;
+</button>
+<strong>Oh nose!</strong>' .$error_msg. '
+</div>';
+            
+        }
+        ?>
 
         <!-- Registration form to be output if the POST variables are not
         set or if the registration script caused an error. -->
-        <h1>Register with us</h1>
-        <?php
-        if (!empty($error_msg)) {
-            echo $error_msg;
-        }
-        ?>
+		<div class="instructions">
+        <h1>Register for online examination</h1>
+        <br/>
         <ul>
+		<h3> Instructions for Registration </h3>
             <li>Usernames may contain only digits, upper and lower case letters and underscores</li>
             <li>Emails must have a valid email format</li>
             <li>Passwords must be at least 6 characters long</li>
@@ -159,31 +170,41 @@ function esc_url($url) {
             </li>
             <li>Your password and confirmation must match exactly</li>
         </ul>
+		
+		
+		</div>
         <form class="form-signin" action="<?php echo esc_url($_SERVER['PHP_SELF']); ?>" 
-		
-		
                 method="post" 
-                name="registration_form">
-	<h2 class="form-signin-heading">Register for examination</h2>
-            Username: <input type='text' 
+                name="registration_form"
+				role="form">
+	<h2 class="form-signin-heading">Registration form</h2>
+            <input type='text' class="form-control" placeholder="Username"
                 name='username' 
-                id='username' /><br>
-            Email: <input type="text" name="email" id="email" /><br>
-            Password: <input type="password"
+                id='username' >
+            <input type="password" class="form-control" placeholder="Password"
                              name="password" 
-                             id="password"/><br>
-            Confirm password: <input type="password" 
+                             id="password">
+            <input type="password" class="form-control" placeholder="Confirm Password"
                                      name="confirmpwd" 
-                                     id="confirmpwd" /><br>
-            <input type="button" 
+                                     id="confirmpwd" >
+			<input type="number" class="form-control" placeholder="Question Set No." 
+										name="qid" id="qid" min="1" max="10">
+										<br/>Date-Time of Examination:<br/>
+			<input type="date" name="examdate" id="examdate" class="form-control">
+			<input type="time" name="examtime" id="examtime" class="form-control">
+			
+            <input type="button" class="btn btn-lg btn-primary btn-block"
                    value="Register" 
                    onclick="return regformhash(this.form,
                                    this.form.username,
-                                   this.form.email,
                                    this.form.password,
-                                   this.form.confirmpwd);" /> 
+                                   this.form.confirmpwd,
+								   this.form.qid,
+								   this.form.examdate,
+								   this.form.examtime
+								   );" /> 
         </form>
-        <p>Return to the <a href="index.php">login page</a>.</p>
+        
 		</div>
     </body>
 </html>
