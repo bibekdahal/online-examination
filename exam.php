@@ -1,8 +1,6 @@
 <?php
 require_once 'Pages.php';
 require_once('classes/Questions.php');
-$questions = new Questions;
-
 $loginPage->StartHead('Online Exam');
 ?>
 
@@ -10,8 +8,20 @@ $loginPage->StartHead('Online Exam');
 $loginPage->Endhead();
 $loginPage->StartBody();
 
+/*$user -> StartSession();
+if (!$user->loggedin()){
+	echo '
+	<div class="container">
+		<h1>You are not logged in.</h1>
+	</div>
+	';
+	exit(0);
+}*/
+
+$questions = new Questions;
+
 $setid = 1;
-$userid = 1;
+$userid = 1;//$_SESSION['user_id'];
 
 $num = $questions->GetNumQuestions($setid);
 $submitted = false;
@@ -31,9 +41,44 @@ if ($submitted) {
 }
 //---------------------------- Start of Body --------------------------------
 ?>
-
+	<div class="navbar navbar-default navbar-fixed-top" role="navigation">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <div class="navbar-brand">Online Examination</div>
+        </div>
+        <div class="navbar-collapse collapse">
+          <ul class="nav navbar-nav">
+            <li class="active"><a href="#">Home</a></li>
+            <li><a href="#about">About</a></li>
+            <li><a href="#contact">Contact</a></li>
+            <li class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown">Dropdown <b class="caret"></b></a>
+              <ul class="dropdown-menu">
+                <li><a href="#">Action</a></li>
+                <li><a href="#">Another action</a></li>
+                <li><a href="#">Something else here</a></li>
+                <li class="divider"></li>
+                <li class="dropdown-header">Nav header</li>
+                <li><a href="#">Separated link</a></li>
+                <li><a href="#">One more separated link</a></li>
+              </ul>
+            </li>
+          </ul>
+          <ul class="nav navbar-nav navbar-right">
+            <li><a href="../navbar/">Default</a></li>
+            <li><a href="../navbar-static-top/">Static top</a></li>
+            <li class="active"><a href="./">Fixed top</a></li>
+          </ul>
+        </div><!--/.nav-collapse -->
+      </div>
+    </div>
+    
 <div class="container">
-	<h1>Online Exam</h1>
 	<br/><br/>
 	<form method="post" role="form">
 <?php
