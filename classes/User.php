@@ -56,6 +56,21 @@ class User {
 		}
 	}
 	
+	function GetStartTime(){
+		if ($stmt = $this->m_sqli->prepare("SELECT exam_start_time FROM users WHERE id = ? LIMIT 1")) {
+			$stmt -> bind_param('i', $this->m_userid);
+			$stmt -> execute();
+			$stmt -> store_result();
+			if ($stmt -> num_rows == 1) {
+				$stmt -> bind_result($exam_start_time);
+				$stmt -> fetch();
+				date_default_timezone_set("Asia/Kathmandu");
+				$examtime = strtotime($exam_start_time);				
+				return $examtime;				
+			}
+		}
+	}
+	
 	function ExamStarted()
 	{
 		if ($stmt = $this->m_sqli->prepare("SELECT exam_start_time FROM users WHERE id = ? LIMIT 1")) {
@@ -89,7 +104,7 @@ class User {
 				}else{
 					return true;
 				}
-			}	
+			}
 		}else{
 			return false;
 		}

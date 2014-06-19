@@ -2,43 +2,15 @@
 require_once 'Pages.php';
 require_once('classes/Questions.php');
 $loginPage->StartHead('Online Exam');
+
 ?>
 
 <?php
 $loginPage->Endhead();
 $loginPage->StartBody();
 
-/*$user -> StartSession();
-if (!$user->loggedin()){
-	echo '
-	<div class="container">
-		<h1>You are not logged in.</h1>
-	</div>
-	';
-	exit(0);
-}*/
 
 $questions = new Questions;
-
-$setid = 1;
-$userid = 1;//$_SESSION['user_id'];
-
-$num = $questions->GetNumQuestions($setid);
-$submitted = false;
-for ($i=0; $i<$num; $i++)
-	if (isset($_POST['optionsRadios'.$i])){
-		$questions->AddAnswer($userid, $setid, $i+1, intval($_POST['optionsRadios'.$i]));
-		$submitted=true;
-	}
-	
-if ($submitted) {
-	echo '
-	<div class="container">
-		<h1>Your answers are submitted.</h1>
-	</div>
-	';
-	exit(0);
-}
 //---------------------------- Start of Body --------------------------------
 ?>
 	<div class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -53,35 +25,26 @@ if ($submitted) {
         </div>
         <div class="navbar-collapse collapse">
           <ul class="nav navbar-nav">
-            <li class="active"><a href="#">Home</a></li>
-            <li><a href="#about">About</a></li>
-            <li><a href="#contact">Contact</a></li>
-            <li class="dropdown">
-              <a href="#" class="dropdown-toggle" data-toggle="dropdown">Dropdown <b class="caret"></b></a>
-              <ul class="dropdown-menu">
-                <li><a href="#">Action</a></li>
-                <li><a href="#">Another action</a></li>
-                <li><a href="#">Something else here</a></li>
-                <li class="divider"></li>
-                <li class="dropdown-header">Nav header</li>
-                <li><a href="#">Separated link</a></li>
-                <li><a href="#">One more separated link</a></li>
-              </ul>
-            </li>
+            <li><a href="#">Instruction</a></li>            
+            <li><a href="exam.php">Exam Page</a></li>
           </ul>
           <ul class="nav navbar-nav navbar-right">
-            <li><a href="../navbar/">Default</a></li>
-            <li><a href="../navbar-static-top/">Static top</a></li>
-            <li class="active"><a href="./">Fixed top</a></li>
+            <li><a id="timer" href="#"></a></li>
+            <li class="active"><a href="./">Log Out</a></li>
           </ul>
         </div><!--/.nav-collapse -->
       </div>
     </div>
     
+    
 <div class="container">
 	<br/><br/>
 	<form method="post" role="form">
+		
 <?php
+
+
+		
 	if($user->loggedin()){
 		try{
 			if($user->ExamStarted()){
@@ -100,7 +63,28 @@ if ($submitted) {
 		echo 'Current Status: Not logged in, please log in first';
 		return;
 	}
-	$num = $questions->GetNumQuestions(1);
+	$endtime = $user->GetStartTime() + 10800;
+	
+	$num = $questions->GetNumQuestions(1);		
+	$setid = 1;
+	$userid = $_SESSION['user_id'];
+	
+	$submitted = false;
+	for ($i=0; $i<$num; $i++)
+		if (isset($_POST['optionsRadios'.$i])){
+			$questions->AddAnswer($userid, $setid, $i+1, intval($_POST['optionsRadios'.$i]));
+			$submitted=true;
+		}
+		
+	if ($submitted) {
+		echo '
+		<div class="container">
+			<h1>Your answers are submitted.</h1>
+		</div>
+		';
+		return;
+	}
+
 	for ($i=0; $i<$num; $i++)
 	{
 		$questions->GetQuestion($setid, $i+1, $q, $o[0], $o[1], $o[2], $o[3]);
@@ -146,7 +130,24 @@ $loginPage->EndBody();
 
 <script type="text/javascript">
 
+var TimeLimit = new Date('<?php echo date('r', $endtime) ?>');
+function countdownto() {
+	  var date = Math.round((TimeLimit-new Date())/1000);
+	  var hours = Math.floor(date/3600);
+	  date = date - (hours*3600);
+	  var mins = Math.floor(date/60);
+	  date = date - (mins*60);
+	  var secs = date;
+	  if (hours<10) hours = '0'+hours;
+	  if (mins<10) mins = '0'+mins;
+	  if (secs<10) secs = '0'+secs;
+	  $("#timer").html(hours+':'+mins+':'+secs);
+	  setTimeout("countdownto()",1000);
+ }
+
+
 $(document).ready(function() {
+	countdownto();
 	<?php
 	for ($i=0; $i<$num; $i++)
 	echo '$(\'input[name="optionsRadios'.$i.'"]\').change( function() {$(this).closest(".panel-body").css( "background-color", "#cdc" ); var j = parseInt($(this).val()); answer('.($i+1).', j);});';
