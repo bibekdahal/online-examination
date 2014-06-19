@@ -163,6 +163,30 @@ class Questions{
 		}
 	}
 	
+	public function GetPassage($setid, $sn)
+	{
+		$mysqli = $this->m_sqli;
+		if ($stmt = $mysqli->prepare('SELECT qid FROM questions WHERE setid=? AND sn=?')){
+			$stmt->bind_param('ii', $setid, $sn);
+			$stmt->execute();
+			$stmt->store_result();
+			$stmt->bind_result($qid);
+			if ($stmt->fetch()){			
+				if ($stmt1 = $mysqli->prepare('SELECT passage FROM passages WHERE qid=?')){
+					$stmt1->bind_param('i', $qid);
+					$stmt1->execute();	
+					$stmt1->store_result();
+					$stmt1->bind_result($passage);					
+					if ($stmt1->fetch()){
+						return $passage;
+					}		
+					$stmt1->close();
+				}	
+			}		
+			$stmt->close();
+		}
+		return "";
+	}	
 	
 	public function DeleteImages($setid, $qsn) {
 		$mysqli = $this->m_sqli;

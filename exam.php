@@ -30,7 +30,7 @@ $questions = new Questions;
           </ul>
           <ul class="nav navbar-nav navbar-right">
             <li><a id="timer" href="#"></a></li>
-            <li class="active"><a href="./">Log Out</a></li>
+            <li class="active"><a id="logout" href="logout.php"></a></li>
           </ul>
         </div><!--/.nav-collapse -->
       </div>
@@ -87,6 +87,16 @@ $questions = new Questions;
 
 	for ($i=0; $i<$num; $i++)
 	{
+		$passage = $questions->GetPassage($setid, $i+1);
+		if ($passage!=""){
+			echo '
+			<div class="panel panel-default">
+				  <div class="panel-heading">
+				    <h3 class="panel-title">' . $passage .
+					 '</h3>
+				  </div>
+			</div>';
+		}
 		$questions->GetQuestion($setid, $i+1, $q, $o[0], $o[1], $o[2], $o[3]);
 		$option = $questions->GetAnswer($userid, $setid, $i+1);
 		echo '
@@ -141,12 +151,13 @@ function countdownto() {
 	  if (hours<10) hours = '0'+hours;
 	  if (mins<10) mins = '0'+mins;
 	  if (secs<10) secs = '0'+secs;
-	  $("#timer").html(hours+':'+mins+':'+secs);
+	  $("#timer").text(hours+':'+mins+':'+secs);
 	  setTimeout("countdownto()",1000);
  }
 
 
 $(document).ready(function() {
+	$("#logout").text("Log Out");
 	countdownto();
 	<?php
 	for ($i=0; $i<$num; $i++)

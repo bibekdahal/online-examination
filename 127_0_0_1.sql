@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Jun 19, 2014 at 04:59 PM
+-- Generation Time: Jun 19, 2014 at 06:15 PM
 -- Server version: 5.6.17
 -- PHP Version: 5.5.12
 
@@ -37,7 +37,14 @@ CREATE TABLE IF NOT EXISTS `answers` (
   KEY `userid` (`userid`,`qid`),
   KEY `userid_2` (`userid`),
   KEY `qid` (`qid`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=4 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=5 ;
+
+--
+-- Dumping data for table `answers`
+--
+
+INSERT INTO `answers` (`id`, `userid`, `qid`, `ans`) VALUES
+(4, 1, 10, 0);
 
 -- --------------------------------------------------------
 
@@ -66,6 +73,27 @@ INSERT INTO `login_attempts` (`user_id`, `time`) VALUES
 (1, '1402916314'),
 (1, '1402916318'),
 (1, '1403170006');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `passages`
+--
+
+CREATE TABLE IF NOT EXISTS `passages` (
+  `id` int(11) NOT NULL,
+  `qid` int(11) NOT NULL,
+  `passage` longtext NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `qid` (`qid`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `passages`
+--
+
+INSERT INTO `passages` (`id`, `qid`, `passage`) VALUES
+(1, 34, '<strong>Read the following text and put correct answer on the answer sheet given:<br/></strong>A vexed enemy of mankind, as people have discovered, is not science, but war, Science merely reflects the prevailing social forces. It is found that, when there is peace, science is constructive ends. The weapons which science gives us do not necessarily cause war; they make war increasingly terrible. Till now, it has brought us to the doorstep of doom. Our main problem, therefore, is not to curb science, but to stop war-to substitute law for force, and international government for anarchy in the relations of one nation with another. That is a job in which   everybody must participate, including the scientists. But the bombing of Hiroshima suddenly woke us up to the fact that we have very little time. The hour is late and our work has scarcely begun. Now we are face with an urgent question -&quot;Can education and tolerance, understanding   and creative intelligence run fast enough to keep us abreast with our mounting capacity to destroy?&quot; That is the question which we shall have to answer one way or the other in our generation. Science must help us in arriving at the answer, but the main decision lies within ourselves.');
 
 -- --------------------------------------------------------
 
@@ -111,7 +139,7 @@ CREATE TABLE IF NOT EXISTS `questions` (
 --
 
 INSERT INTO `questions` (`qid`, `setid`, `sn`, `question`, `optiona`, `optionb`, `optionc`, `optiond`) VALUES
-(10, 1, 1, 'The minimum value of n(A&#199;B) when n(&#200;) = 120, n(A) = 90, n(B) = 55 is ', '40', '25', '55', '30'),
+(10, 1, 1, 'The minimum value of n(A&#8745;B) when n(&#8746;) = 120, n(A) = 90, n(B) = 55 is ', '40', '25', '55', '30'),
 (11, 1, 2, 'If <img src="images/1acnsj/2x0.png" style="vertical-align:middle;"/> then value of x =', '5', '25', '32', '64'),
 (12, 1, 3, 'The equation | <img src="images/1acnsj/3x0.png" style="vertical-align:middle;"/>| = 5 represents', 'a circle', 'a st. line', 'sphere', 'ellipse'),
 (13, 1, 4, 'The points (a,0), (0,b) and (1,1) are collinear if<br/>', 'a+b=ab  ', 'a -  b = ab', 'b-a=ab ', 'a + b+ ab= 0  '),
@@ -135,7 +163,7 @@ INSERT INTO `questions` (`qid`, `setid`, `sn`, `question`, `optiona`, `optionb`,
 (31, 1, 22, 'If <img src="images/1acnsj/22x0.png" style="vertical-align:middle;"/> then <img src="images/1acnsj/22x1.png" style="vertical-align:middle;"/>=', '<img src="images/1acnsj/22x2.png" style="vertical-align:middle;"/>', '<img src="images/1acnsj/22x3.png" style="vertical-align:middle;"/>', '<img src="images/1acnsj/22x4.png" style="vertical-align:middle;"/>', '<img src="images/1acnsj/22x5.png" style="vertical-align:middle;"/>'),
 (32, 1, 23, 'A diver at a depth of 12 cm in water (&#181; = ) sees the sky in a cone of semi vertex angle', '<img src="images/1acnsj/23x0.png" style="vertical-align:middle;"/>', '<img src="images/1acnsj/23x1.png" style="vertical-align:middle;"/>', '<img src="images/1acnsj/23x2.png" style="vertical-align:middle;"/>', '90&#176;'),
 (33, 1, 24, 'A uniform wire of resistance R W is divided into ten equal parts and all of them are connected in parallel. The equivalent resistance will be ', '0.01 R', '0.1 R', '10 R', '100R'),
-(34, 1, 25, '<strong>Read the following text and put correct answer on the answer sheet given:<br/></strong>A vexed enemy of mankind, as people have discovered, is not science, but war, Science merely reflects the prevailing social forces. It is found that, when there is peace, science is constructive ends. The weapons which science gives us do not necessarily cause war; they make war increasingly terrible. Till now, it has brought us to the doorstep of doom. Our main problem, therefore, is not to curb science, but to stop war-to substitute law for force, and international government for anarchy in the relations of one nation with another. That is a job in which   everybody must participate, including the scientists. But the bombing of Hiroshima suddenly woke us up to the fact that we have very little time. The hour is late and our work has scarcely begun. Now we are face with an urgent question -&quot;Can education and tolerance, understanding   and creative intelligence run fast enough to keep us abreast with our mounting capacity to destroy?&quot; That is the question which we shall have to answer one way or the other in our generation. Science must help us in arriving at the answer, but the main decision lies within ourselves.<br/><br/>According to the writer, the real enemy of mankind is not science but war, Because', 'science merely invents   the weapons with<br/> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;    which war is fought  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;', 'science during wars becomes destructive', 'the weapons that science invents<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;    necessarily lead to the war', 'the weapons invent by science do not cause<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   war, though  these make it more  destructive '),
+(34, 1, 25, 'According to the writer, the real enemy of mankind is not science but war, Because', 'science merely invents   the weapons with<br/> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;    which war is fought  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;', 'science during wars becomes destructive', 'the weapons that science invents<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;    necessarily lead to the war', 'the weapons invent by science do not cause<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   war, though  these make it more  destructive '),
 (35, 1, 26, 'War can be stopped if____.', 'science is not allowed to lead us to utter<br/>              destruction', 'we replace force and lawlessness only by<br/>    law  and international government ', 'science is restricted to be utilized only<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;    during war time  ', 'weapons invented by science are not used<br/>   to launch a war'),
 (36, 1, 27, 'What is wrong on Front View of the given figure?<br/><img src="images/1acnsj/27x0.png" style="vertical-align:middle;"/>', 'A horizontal hidden (dash) line', 'A horizontal solid (visible) line', 'A vertical hidden (dash) line', 'A vertical solid (visible) line'),
 (37, 1, 28, 'For the given figure, which of the following view/s have missing line/s?<br/><br/><img src="images/1acnsj/28x0.png" style="vertical-align:middle;"/><img src="images/1acnsj/28x1.png" style="vertical-align:middle;"/><br/>', 'Front view only   ', 'Top view only', 'Right side view only', 'Both front and top views'),
@@ -182,7 +210,6 @@ INSERT INTO `questions` (`qid`, `setid`, `sn`, `question`, `optiona`, `optionb`,
 CREATE TABLE IF NOT EXISTS `users` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `username` varchar(30) NOT NULL,
-  `email` varchar(50) NOT NULL,
   `password` char(128) NOT NULL,
   `salt` char(128) NOT NULL,
   `question_set` int(11) NOT NULL,
@@ -194,8 +221,8 @@ CREATE TABLE IF NOT EXISTS `users` (
 -- Dumping data for table `users`
 --
 
-INSERT INTO `users` (`id`, `username`, `email`, `password`, `salt`, `question_set`, `exam_start_time`) VALUES
-(1, 'test_user', 'test_user@test.com', '00807432eae173f652f2064bdca1b61b290b52d40e429a7d295d76a71084aa96c0233b82f1feac45529e0726559645acaed6f3ae58a286b9f075916ebf66cacc', 'f9aab579fc1b41ed0c44fe4ecdbfcdb4cb99b9023abb241a6db833288f4eea3c02f76e0d35204a8695077dcf81932aa59006423976224be0390395bae152d4ef', 1, '2014-06-19 19:01:40');
+INSERT INTO `users` (`id`, `username`, `password`, `salt`, `question_set`, `exam_start_time`) VALUES
+(1, 'test_user', '00807432eae173f652f2064bdca1b61b290b52d40e429a7d295d76a71084aa96c0233b82f1feac45529e0726559645acaed6f3ae58a286b9f075916ebf66cacc', 'f9aab579fc1b41ed0c44fe4ecdbfcdb4cb99b9023abb241a6db833288f4eea3c02f76e0d35204a8695077dcf81932aa59006423976224be0390395bae152d4ef', 1, '2014-06-19 19:01:40');
 
 --
 -- Constraints for dumped tables
@@ -207,6 +234,12 @@ INSERT INTO `users` (`id`, `username`, `email`, `password`, `salt`, `question_se
 ALTER TABLE `answers`
   ADD CONSTRAINT `answers_ibfk_2` FOREIGN KEY (`qid`) REFERENCES `questions` (`qid`),
   ADD CONSTRAINT `answers_ibfk_1` FOREIGN KEY (`userid`) REFERENCES `users` (`id`);
+
+--
+-- Constraints for table `passages`
+--
+ALTER TABLE `passages`
+  ADD CONSTRAINT `passages_ibfk_1` FOREIGN KEY (`qid`) REFERENCES `questions` (`qid`);
 
 --
 -- Constraints for table `questions`
