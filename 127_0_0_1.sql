@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 4.1.14
+-- version 4.0.4.1
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Jun 18, 2014 at 02:04 PM
--- Server version: 5.6.17
--- PHP Version: 5.5.12
+-- Generation Time: Jun 19, 2014 at 10:43 AM
+-- Server version: 5.5.32
+-- PHP Version: 5.4.16
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
@@ -59,14 +59,20 @@ CREATE TABLE IF NOT EXISTS `question_sets` (
   `setid` int(11) NOT NULL AUTO_INCREMENT,
   `imagesfolder` varchar(100) NOT NULL,
   PRIMARY KEY (`setid`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=2 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=8 ;
 
 --
 -- Dumping data for table `question_sets`
 --
 
 INSERT INTO `question_sets` (`setid`, `imagesfolder`) VALUES
-(1, '1acnsj');
+(1, '1acnsj'),
+(2, '2acnsj'),
+(3, '3acnsj'),
+(4, '4acnsj'),
+(5, '5acnsj'),
+(6, '6acnsj'),
+(7, '7acnsj');
 
 -- --------------------------------------------------------
 
@@ -85,7 +91,7 @@ CREATE TABLE IF NOT EXISTS `questions` (
   `optiond` mediumtext NOT NULL,
   PRIMARY KEY (`qid`),
   KEY `setid` (`setid`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=3 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=5 ;
 
 --
 -- Dumping data for table `questions`
@@ -93,7 +99,8 @@ CREATE TABLE IF NOT EXISTS `questions` (
 
 INSERT INTO `questions` (`qid`, `setid`, `sn`, `question`, `optiona`, `optionb`, `optionc`, `optiond`) VALUES
 (1, 1, 1, 'HELLO?', 'WORLD', 'NOT WORLD', 'BOLD', 'NOT BOLD'),
-(2, 1, 2, 'What is <img src="images/1acnsj/2x0.png" />?<br/>', 'TEST', 'sdajhasdj', 'jcxmv', 'qw[e;');
+(2, 1, 2, 'What is <img src="images/1acnsj/2x0.png" />?<br/>', 'TEST', 'sdajhasdj', 'jcxmv', 'qw[e;'),
+(3, 1, 3, 'The minimum value of n(A&#8745;B) when n(U) = 120, n(A) = 90, n(B) = 55 is', '40', '25', '50', '30');
 
 -- --------------------------------------------------------
 
@@ -107,6 +114,8 @@ CREATE TABLE IF NOT EXISTS `users` (
   `email` varchar(50) NOT NULL,
   `password` char(128) NOT NULL,
   `salt` char(128) NOT NULL,
+  `question_set` int(11) NOT NULL,
+  `exam_start_time` datetime NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=2 ;
 
@@ -114,8 +123,8 @@ CREATE TABLE IF NOT EXISTS `users` (
 -- Dumping data for table `users`
 --
 
-INSERT INTO `users` (`id`, `username`, `email`, `password`, `salt`) VALUES
-(1, 'test_user', '', '00807432eae173f652f2064bdca1b61b290b52d40e429a7d295d76a71084aa96c0233b82f1feac45529e0726559645acaed6f3ae58a286b9f075916ebf66cacc', 'f9aab579fc1b41ed0c44fe4ecdbfcdb4cb99b9023abb241a6db833288f4eea3c02f76e0d35204a8695077dcf81932aa59006423976224be0390395bae152d4ef');
+INSERT INTO `users` (`id`, `username`, `email`, `password`, `salt`, `question_set`, `exam_start_time`) VALUES
+(1, 'test_user', 'test_user@test.com', '00807432eae173f652f2064bdca1b61b290b52d40e429a7d295d76a71084aa96c0233b82f1feac45529e0726559645acaed6f3ae58a286b9f075916ebf66cacc', 'f9aab579fc1b41ed0c44fe4ecdbfcdb4cb99b9023abb241a6db833288f4eea3c02f76e0d35204a8695077dcf81932aa59006423976224be0390395bae152d4ef', 1, '2014-06-19 11:28:00');
 
 --
 -- Constraints for dumped tables

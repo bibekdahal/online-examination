@@ -3,10 +3,12 @@ require_once 'Pages.php';
 require_once('classes/Questions.php');
 $questions = new Questions;
 
-$loginPage->StartHead("Online Exam");
+$loginPage->StartHead('Online Exam');
 $loginPage->Endhead();
 $loginPage->StartBody();
 
+$setid = 1;
+$userid = 1;
 //---------------------------- Start of Body --------------------------------
 ?>
 
@@ -15,10 +17,10 @@ $loginPage->StartBody();
 	<br/><br/>
 	<form role="form">
 <?php
-	$num = $questions->GetNumQuestions(1);
+	$num = $questions->GetNumQuestions($setid);
 	for ($i=0; $i<$num; $i++)
 	{
-		$questions->GetQuestion(1, $i+1, $q, $o[0], $o[1], $o[2], $o[3]);
+		$questions->GetQuestion($setid, $i+1, $q, $o[0], $o[1], $o[2], $o[3]);
 		echo '
 				<div class="panel panel-default">
 				  <div class="panel-heading">
@@ -29,13 +31,14 @@ $loginPage->StartBody();
 		
 		for ($j=0; $j<4; $j++)
 		{
+			$option = $questions->GetAnswer($userid, $setid, $i+1);
 			if ($j==0 || $j==2)
 				echo '<div class="row">';
 			echo '
 			 	<div class="col-md-6">
 					<div class="radio">
 					  <label>
-					    <input type="radio" name="optionsRadios'.$i.'" value="option'.($i*4+$j).'" '.(($j==0)?'checked':'').'>
+					    <input type="radio" name="optionsRadios'.$i.'" value="'.$j.'" '. (($option==$j)?'checked':'') .'>
 					    '.$o[$j].'
 					  </label>
 					</div>
@@ -53,4 +56,24 @@ $loginPage->StartBody();
 <?php
 //----------------------------- Body Ends -----------------------------------
 $loginPage->EndBody();
+
 ?>
+
+<script type="text/javascript">
+
+$(document).ready(function() {
+	<?php
+	for ($i=0; $i<$num; $i++)
+	echo '$(\'input[name="optionsRadios'.$i.'"]\').change( function() {var j = parseInt($(this).val()); answer('.($i+1).', j);});';
+	?>});
+
+function answer(sn, option)
+{
+	$.post( "answer.php", { userid: <?php echo $userid ?>, setid: <?php echo $setid ?>, qsn: sn, option: option } ,
+  function(data,status){
+    //alert("Data: " + data + "\nStatus: " + status);
+  });
+	
+}
+	
+</script>

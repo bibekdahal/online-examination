@@ -3,7 +3,7 @@
 require_once('../classes/Questions.php');
 $questions = new Questions;
 
-$questions->AddQuestion(intval($_REQUEST['setid']), intval($_REQUEST['qsn']), $_REQUEST['question'], 
-						$_REQUEST['optiona'], $_REQUEST['optionb'], $_REQUEST['optionc'], $_REQUEST['optiond']);
+$questions->AddQuestion(intval($_POST['setid']), intval($_POST['qsn']), $_POST['question'], 
+						$_POST['optiona'], $_POST['optionb'], $_POST['optionc'], $_POST['optiond']);
 echo 'Added Successfully';
 ?>
