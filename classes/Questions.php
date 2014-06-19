@@ -197,6 +197,66 @@ class Questions{
 		}
 	}
 	
+	public function AddAnswer($userid, $setid, $qsn, $option){
+		$mysqli = $this->m_sqli;
+		if ($stmt = $mysqli->prepare('SELECT qid FROM questions WHERE setid=? AND sn=?')){
+			$stmt->bind_param('ii', $setid, $qsn);
+			$stmt->execute();
+			$stmt->store_result();
+			$stmt->bind_result($qid);
+			if ($stmt->fetch()){			
+				if ($stmt1 = $mysqli->prepare('SELECT * FROM answers WHERE qid=? AND userid=?')){
+					$stmt1->bind_param('ii', $qid, $userid);
+					$stmt1->execute();	
+					$stmt1->store_result();
+					
+					if ($stmt1->num_rows > 0){
+						if ($stmt2 = $mysqli->prepare('UPDATE answers SET ans=? WHERE qid=? AND userid=?')){
+							$stmt2->bind_param('iii', $option, $qid, $userid);
+							$stmt2->execute();
+							$stmt2->close();
+						}
+					}
+					else{
+						if ($stmt2 = $mysqli->prepare('INSERT INTO answers(userid, qid, ans) VALUES(?,?,?)')){
+							$stmt2->bind_param('iii', $userid, $qid, $option);
+							$stmt2->execute();
+							$stmt2->close();
+						}
+					}				
+					$stmt1->close();
+				}	
+			}		
+			$stmt->close();
+		}
+	}
+	
+	public function GetAnswer($userid, $setid, $qsn){
+		$mysqli = $this->m_sqli;
+		
+		if ($stmt = $mysqli->prepare('SELECT qid FROM questions WHERE setid=? AND sn=?')){
+			$stmt->bind_param('ii', $setid, $qsn);
+			$stmt->execute();
+			$stmt->store_result();
+			$stmt->bind_result($qid);
+			if ($stmt->fetch()){			
+				if ($stmt1 = $mysqli->prepare('SELECT ans FROM answers WHERE qid=? AND userid=?')){
+					$stmt1->bind_param('ii', $qid, $userid);
+					$stmt1->execute();	
+					$stmt1->store_result();
+					$stmt1->bind_result($option);
+					if ($stmt1->fetch())
+						return $option;
+						
+					$stmt1->close();
+				}							
+			}
+			$stmt->close();
+				
+		}
+		return -1;	
+	}
+	
 }
 
 ?>
