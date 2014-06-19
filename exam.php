@@ -52,7 +52,7 @@ if ($submitted) {
 			return;
 		}
 	}else{
-		echo 'Current Status: Not logged in, please log in first';
+		echo 'Current Status: Not logged in, please <a href="login.php">log in</a> first';
 		return;
 	}
 	$num = $questions->GetNumQuestions(1);
