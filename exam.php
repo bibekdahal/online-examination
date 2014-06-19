@@ -1,7 +1,7 @@
 <?php
 require_once 'Pages.php';
 require_once('classes/Questions.php');
-$loginPage->StartHead('Online Exam');
+$loginPage->StartHead('Online Examination');
 
 ?>
 
@@ -25,12 +25,12 @@ $questions = new Questions;
         </div>
         <div class="navbar-collapse collapse">
           <ul class="nav navbar-nav">
-            <li><a href="#">Instruction</a></li>            
-            <li><a href="exam.php">Exam Page</a></li>
+            <li ><a href="instructions.php">Instruction</a></li>            
+            <li class="active"><a href="exam.php"><strong>Exam Page</strong></a></li>
           </ul>
           <ul class="nav navbar-nav navbar-right">
             <li><a id="timer" href="#"></a></li>
-            <li class="active"><a href="./">Log Out</a></li>
+            <li ><a href="./">Log Out</a></li>
           </ul>
         </div><!--/.nav-collapse -->
       </div>
@@ -95,7 +95,7 @@ $questions = new Questions;
 				    <h3 class="panel-title">'.($i+1).'. ' . $q .
 					 '</h3>
 				  </div>
-				  <div class="panel-body" '. (($option>-1)?'style="background-color: #cdc;"':'') .'>';
+				  <div class="panel-body" '. (($option>-1)?'style="background-color: #edf3f1;"':'') .'>';
 		
 		for ($j=0; $j<4; $j++)
 		{

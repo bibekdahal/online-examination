@@ -7,7 +7,6 @@ $user = new User;
 $mainPage = new Page;
 $loginPage = new Page;
 $examPage = new Page;
-
-//$logoutPage = new Page;
+$instructionPage = new Page;
 
 ?>
