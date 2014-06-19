@@ -4,6 +4,9 @@ require_once('classes/Questions.php');
 $questions = new Questions;
 
 $loginPage->StartHead('Online Exam');
+?>
+
+<?php
 $loginPage->Endhead();
 $loginPage->StartBody();
 
@@ -21,17 +24,17 @@ $userid = 1;
 	for ($i=0; $i<$num; $i++)
 	{
 		$questions->GetQuestion($setid, $i+1, $q, $o[0], $o[1], $o[2], $o[3]);
+		$option = $questions->GetAnswer($userid, $setid, $i+1);
 		echo '
 				<div class="panel panel-default">
 				  <div class="panel-heading">
 				    <h3 class="panel-title">'.($i+1).'. ' . $q .
 					 '</h3>
 				  </div>
-				  <div class="panel-body">';
+				  <div class="panel-body" '. (($option>-1)?'style="background-color: #cdc;"':'') .'>';
 		
 		for ($j=0; $j<4; $j++)
 		{
-			$option = $questions->GetAnswer($userid, $setid, $i+1);
 			if ($j==0 || $j==2)
 				echo '<div class="row">';
 			echo '
@@ -64,7 +67,7 @@ $loginPage->EndBody();
 $(document).ready(function() {
 	<?php
 	for ($i=0; $i<$num; $i++)
-	echo '$(\'input[name="optionsRadios'.$i.'"]\').change( function() {var j = parseInt($(this).val()); answer('.($i+1).', j);});';
+	echo '$(\'input[name="optionsRadios'.$i.'"]\').change( function() {$(this).closest(".panel-body").css( "background-color", "#cdc" ); var j = parseInt($(this).val()); answer('.($i+1).', j);});';
 	?>});
 
 function answer(sn, option)
