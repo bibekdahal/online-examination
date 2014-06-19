@@ -12,15 +12,31 @@ $loginPage->StartBody();
 
 $setid = 1;
 $userid = 1;
+
+$num = $questions->GetNumQuestions($setid);
+$submitted = false;
+for ($i=0; $i<$num; $i++)
+	if (isset($_POST['optionsRadios'.$i])){
+		$questions->AddAnswer($userid, $setid, $i+1, intval($_POST['optionsRadios'.$i]));
+		$submitted=true;
+	}
+	
+if ($submitted) {
+	echo '
+	<div class="container">
+		<h1>Your answers are submitted.</h1>
+	</div>
+	';
+	exit(0);
+}
 //---------------------------- Start of Body --------------------------------
 ?>
 
 <div class="container">
 	<h1>Online Exam</h1>
 	<br/><br/>
-	<form role="form">
+	<form method="post" role="form">
 <?php
-	$num = $questions->GetNumQuestions($setid);
 	for ($i=0; $i<$num; $i++)
 	{
 		$questions->GetQuestion($setid, $i+1, $q, $o[0], $o[1], $o[2], $o[3]);
@@ -53,6 +69,8 @@ $userid = 1;
 		echo '</div></div>';
 	}
 ?>
+	<br/> <br/>
+    <button class="btn btn-lg btn-primary btn-block" type="submit">Submit</button>
 	</form>
 </div>
 
