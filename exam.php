@@ -82,6 +82,25 @@ if ($submitted) {
 	<br/><br/>
 	<form method="post" role="form">
 <?php
+	if($user->loggedin()){
+		try{
+			if($user->ExamStarted()){
+			}
+		}catch(Exception $e){
+			if($e->GetMessage() == 'NotStarted'){
+				echo 'Your exam is not started yet, please wait...';
+			}
+			else if($e->GetMessage() == 'Expired'){
+				echo 'Your exam time is finished.';
+			}
+			echo '<br/>'.$e->getmessage();
+			return;
+		}
+	}else{
+		echo 'Current Status: Not logged in, please log in first';
+		return;
+	}
+	$num = $questions->GetNumQuestions(1);
 	for ($i=0; $i<$num; $i++)
 	{
 		$questions->GetQuestion($setid, $i+1, $q, $o[0], $o[1], $o[2], $o[3]);

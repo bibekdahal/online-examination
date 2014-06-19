@@ -6,7 +6,10 @@
 
 require_once 'Pages.php';
 $loginError = false;
-$user -> StartSession();
+//$user -> StartSession();
+
+
+
 
 if (isset($_POST['un'], $_POST['psss'])) {
 	$username = $_POST['un'];
@@ -15,6 +18,10 @@ if (isset($_POST['un'], $_POST['psss'])) {
 	} else {
 		$loginError = true;
 	}
+}
+else
+{
+	//echo 'no login data presented';
 }
 
 $loginPage -> StartHead("Log in");
@@ -30,7 +37,17 @@ $loginPage -> StartHead("Log in");
 	$loginPage -> AddStyleSheet("css/signin.css");
 	$loginPage -> Endhead();
 	$loginPage -> StartBody();
-
+	
+	if($user->loggedin()){
+	echo '<p>
+				Continue with  <a href="exam.php">examination</a>.
+			</p>';
+	echo '<p>
+				If you are done, please <a href="logout.php">log out</a>.
+			</p>';
+			$loginPage->EndBody();
+			return;
+}
 	//---------------------------- Start of Body --------------------------------
 ?>
 <div class="container">
@@ -55,12 +72,10 @@ $loginPage -> StartHead("Log in");
 			Sign in
 		</button>
 		<div class = "form-bttmtext">
-			<p>
-				If you are done, please <a href="logout.php">log out</a>.
-			</p>
+			
 			<p>
 				<?php
-					if($user->loggedin()) echo 'Current Status: Logged in'; 
+					if($user->LoggedIn()) echo 'Current Status: Logged in'; 
 					else echo 'Current Status: Not logged in';
 				?>
 			</p>

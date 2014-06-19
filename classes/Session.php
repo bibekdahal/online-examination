@@ -6,8 +6,9 @@ class Session {
 	private $m_httpOnly;
 	public function __construct() {
 		$this->m_sessionName = 'sec_session';
-		$this->m_secure = true;
+		$this->m_secure = false;
 		$this->m_httpOnly = true;
+		$this->Start();
 	}
 	
 	public function Start() {
@@ -21,33 +22,6 @@ class Session {
 		// Start the PHP session
 		session_regenerate_id();
 		// regenerated the session, delete the old one.
-	}
-
-	public function login_check($mysqli) {
-		if (isset($_SESSION['user_id'], $_SESSION['username'], $_SESSION['login_string'])) {
-			$user_id = $_SESSION['user_id'];
-			$login_string = $_SESSION['login_string'];
-			$username = $_SESSION['username'];
-			$user_browser = $_SERVER['HTTP_USER_AGENT'];
-			if ($stmt = $mysqli -> prepare("SELECT password FROM members WHERE id = ? LIMIT 1")) {
-				$stmt -> bind_param('i', $user_id);
-				$stmt -> execute();
-				$stmt -> store_result();
-
-				if ($stmt -> num_rows == 1) {
-					$stmt -> bind_result($password);
-					$stmt -> fetch();
-					$login_check = hash('sha512', $password . $user_browser);
-					if ($login_check == $login_string)
-						return true;
-					else
-						return false;
-				} else
-					return false;
-			} else
-				return false;
-		} else
-			return false;
 	}
 
 }
