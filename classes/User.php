@@ -46,7 +46,7 @@ class User {
 						return true;
 					} else {
 						$now = time();
-						$mysqli -> query("INSERT INTO login_attempts(user_id, time) VALUES ('$user_id', '$now')");
+						$mysqli -> query("INSERT INTO login_attempts(user_id, time) VALUES ('$this->m_userid', '$now')");
 						return false;
 					}
 				}

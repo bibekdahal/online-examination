@@ -60,7 +60,7 @@ $questions = new Questions;
 			return;
 		}
 	}else{
-		echo 'Current Status: Not logged in, please log in first';
+		echo 'Current Status: Not logged in, please <a href="login.php">log in</a> first';
 		return;
 	}
 	$endtime = $user->GetStartTime() + 10800;
