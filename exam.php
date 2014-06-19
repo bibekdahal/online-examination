@@ -25,12 +25,12 @@ $questions = new Questions;
         </div>
         <div class="navbar-collapse collapse">
           <ul class="nav navbar-nav">
-            <li ><a href="instructions.php">Instruction</a></li>            
+            <li ><a href="instructions.php">Instructions</a></li>            
             <li class="active"><a href="exam.php"><strong>Exam Page</strong></a></li>
           </ul>
           <ul class="nav navbar-nav navbar-right">
             <li><a id="timer" href="#"></a></li>
-            <li class="active"><a id="logout" href="logout.php"></a></li>
+            <li class="active"><a id="logout" href="logout.php">Log Out</a></li>
           </ul>
         </div><!--/.nav-collapse -->
       </div>
@@ -38,31 +38,56 @@ $questions = new Questions;
     
     
 <div class="container">
-	<br/><br/>
-	<form method="post" role="form">
+		<br/><br/>
 		
 <?php
-
-
-		
 	if($user->loggedin()){
 		try{
 			if($user->ExamStarted()){
 			}
 		}catch(Exception $e){
 			if($e->GetMessage() == 'NotStarted'){
-				echo 'Your exam is not started yet, please wait...';
+				echo '<span style="font-size:20px;">Your exam is not started yet, please wait...</span><br/>';
+				echo '<div id="rtimer" style="font-size:120px;"> </div></div>';
+				$loginPage->EndBody();
+				$endtime = $user->GetStartTime();
+				echo
+				'
+<script type="text/javascript">
+
+var TimeLimit = new Date("'.(date('r', $endtime)).'");
+function countdownto() {
+	  var date = Math.round((TimeLimit-new Date())/1000);
+	  if (date<=0){window.open("exam.php","_self");}
+	  var hours = Math.floor(date/3600);
+	  date = date - (hours*3600);
+	  var mins = Math.floor(date/60);
+	  date = date - (mins*60);
+	  var secs = date;
+	  if (hours<10) hours = \'0\'+hours;
+	  if (mins<10) mins = \'0\'+mins;
+	  if (secs<10) secs = \'0\'+secs;
+	  $("#rtimer").text(hours+\':\'+mins+\':\'+secs);
+	  setTimeout("countdownto()",1000);
+ }
+$(document).ready(function() {
+	countdownto();});
+</script>
+				';
 			}
 			else if($e->GetMessage() == 'Expired'){
-				echo 'Your exam time is finished.';
+				echo '<span style="font-size:20px;">Your exam time is finished.</span>';
 			}
-			echo '<br/>'.$e->getmessage();
 			return;
 		}
 	}else{
-		echo 'Current Status: Not logged in, please <a href="login.php">log in</a> first';
+		echo '<span style="font-size:20px;">Current Status: Not logged in, please <a href="login.php">log in</a> first</span>';
 		return;
 	}
+	echo 
+	'
+		<form method="post" role="form">
+	';
 	$endtime = $user->GetStartTime() + 10800;
 	
 	$num = $questions->GetNumQuestions(1);		
@@ -128,7 +153,7 @@ $questions = new Questions;
 	}
 ?>
 	<br/> <br/>
-    <button class="btn btn-lg btn-primary btn-block" type="submit">Submit</button>
+    <button id="submit" class="btn btn-lg btn-primary btn-block" type="submit">Submit</button>
 	</form>
 </div>
 
@@ -151,13 +176,14 @@ function countdownto() {
 	  if (hours<10) hours = '0'+hours;
 	  if (mins<10) mins = '0'+mins;
 	  if (secs<10) secs = '0'+secs;
+	  if (date<=0){$("#submit").click();}
 	  $("#timer").text(hours+':'+mins+':'+secs);
 	  setTimeout("countdownto()",1000);
  }
 
 
 $(document).ready(function() {
-	$("#logout").text("Log Out");
+	//$("#logout").text("Log Out");
 	countdownto();
 	<?php
 	for ($i=0; $i<$num; $i++)

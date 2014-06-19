@@ -18,18 +18,28 @@ $instructionPage->StartBody();
         </div>
         <div class="navbar-collapse collapse">
           <ul class="nav navbar-nav">
-            <li class="active"><a href="instructions.php">Instruction</a></li>            
+            <li class="active"><a href="instructions.php">Instructions</a></li>            
             <li ><a href="exam.php"><strong>Exam Page</strong></a></li>
           </ul>
           <ul class="nav navbar-nav navbar-right">
             <li><a id="timer" href="#"></a></li>
-            <li ><a href="./">Log Out</a></li>
+            <li ><a href="logout.php">Log Out</a></li>
           </ul>
         </div><!--/.nav-collapse -->
       </div>
     </div>
 	
-	<div class="container">
+	<br/><br/>
+	<div class="container" style="font-size:20px">
+		<ul>
+			<li>Click on Exam Page above to start giving exam</li>
+			<li>The timer during the exam at the top right corner gives the remaining time to finish the exam</li>
+			<li>Total duration is 3 hours</li>
+			
+			
+		<br/><br/>
+		<a href="exam.php">Start Exam</a>
+		</ul>
 	</div>
 
 <?php

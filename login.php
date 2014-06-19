@@ -39,7 +39,10 @@ $loginPage -> StartHead("Log in");
 	$loginPage -> StartBody();
 	
 	if($user->loggedin()){
-	echo '<p>
+	echo 
+				header("Location: instructions.php");
+				die();
+			'<p>
 				Continue with  <a href="exam.php">examination</a>.
 			</p>';
 	echo '<p>
