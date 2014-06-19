@@ -149,6 +149,7 @@ class Questions{
 			$stmt->bind_param('iisssss', $setid, $sn, $question, $optiona, $optionb, $optionc, $optiond);
 			$stmt->execute();				
 			$stmt->close();	
+			echo 'Added Successfully';
 		}
 	}
 	
