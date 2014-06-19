@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Jun 19, 2014 at 12:34 PM
+-- Generation Time: Jun 19, 2014 at 03:36 PM
 -- Server version: 5.6.17
 -- PHP Version: 5.5.12
 
@@ -37,7 +37,7 @@ CREATE TABLE IF NOT EXISTS `answers` (
   KEY `userid` (`userid`,`qid`),
   KEY `userid_2` (`userid`),
   KEY `qid` (`qid`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=3 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=4 ;
 
 --
 -- Dumping data for table `answers`
@@ -45,7 +45,8 @@ CREATE TABLE IF NOT EXISTS `answers` (
 
 INSERT INTO `answers` (`id`, `userid`, `qid`, `ans`) VALUES
 (1, 1, 1, 1),
-(2, 1, 2, 0);
+(2, 1, 2, 0),
+(3, 1, 3, 3);
 
 -- --------------------------------------------------------
 
@@ -150,7 +151,7 @@ CREATE TABLE IF NOT EXISTS `users` (
 --
 
 INSERT INTO `users` (`id`, `username`, `email`, `password`, `salt`, `question_set`, `exam_start_time`) VALUES
-(1, 'test_user', 'test_user@test.com', '00807432eae173f652f2064bdca1b61b290b52d40e429a7d295d76a71084aa96c0233b82f1feac45529e0726559645acaed6f3ae58a286b9f075916ebf66cacc', 'f9aab579fc1b41ed0c44fe4ecdbfcdb4cb99b9023abb241a6db833288f4eea3c02f76e0d35204a8695077dcf81932aa59006423976224be0390395bae152d4ef', 1, '2014-06-19 11:28:00');
+(1, 'test_user', 'test_user@test.com', '00807432eae173f652f2064bdca1b61b290b52d40e429a7d295d76a71084aa96c0233b82f1feac45529e0726559645acaed6f3ae58a286b9f075916ebf66cacc', 'f9aab579fc1b41ed0c44fe4ecdbfcdb4cb99b9023abb241a6db833288f4eea3c02f76e0d35204a8695077dcf81932aa59006423976224be0390395bae152d4ef', 1, '2014-06-19 19:01:40');
 
 --
 -- Constraints for dumped tables
