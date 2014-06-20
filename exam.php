@@ -53,30 +53,42 @@ $questions = new Questions;
 				$endtime = $user->GetStartTime();
 				echo
 				'
-<script type="text/javascript">
-
-var TimeLimit = new Date("'.(date('r', $endtime)).'");
-function countdownto() {
-	  var date = Math.round((TimeLimit-new Date())/1000);
-	  if (date<=0){window.open("exam.php","_self");}
-	  var hours = Math.floor(date/3600);
-	  date = date - (hours*3600);
-	  var mins = Math.floor(date/60);
-	  date = date - (mins*60);
-	  var secs = date;
-	  if (hours<10) hours = \'0\'+hours;
-	  if (mins<10) mins = \'0\'+mins;
-	  if (secs<10) secs = \'0\'+secs;
-	  $("#rtimer").text(hours+\':\'+mins+\':\'+secs);
-	  setTimeout("countdownto()",1000);
- }
-$(document).ready(function() {
-	countdownto();});
-</script>
+					<script type="text/javascript">
+					
+					var TimeLimit = new Date("'.(date('r', $endtime)).'");
+					function countdownto() {
+						  var date = Math.round((TimeLimit-new Date())/1000);
+						  if (date<=0){window.open("exam.php","_self");}
+						  var hours = Math.floor(date/3600);
+						  date = date - (hours*3600);
+						  var mins = Math.floor(date/60);
+						  date = date - (mins*60);
+						  var secs = date;
+						  if (hours<10) hours = \'0\'+hours;
+						  if (mins<10) mins = \'0\'+mins;
+						  if (secs<10) secs = \'0\'+secs;
+						  $("#rtimer").text(hours+\':\'+mins+\':\'+secs);
+						  setTimeout("countdownto()",1000);
+					 }
+					$(document).ready(function() {
+						countdownto();});
+					</script>
 				';
 			}
 			else if($e->GetMessage() == 'Expired'){
-				echo '<span style="font-size:20px;">Your exam time is finished.</span>';
+				$setid = $user->GetQuestionSet();
+				$num = $questions->GetNumQuestions($setid);
+				$userid = $user->GetUserId();
+				$submitted = false;
+				for ($i=0; $i<$num; $i++)
+					if (isset($_POST['optionsRadios'.$i])){
+						$questions->AddAnswer($userid, $setid, $i+1, intval($_POST['optionsRadios'.$i]));
+						$submitted=true;
+					}
+					
+				echo '<span style="font-size:20px;">Your exam time is finished.';
+				if ($submitted) echo ' All answers have been submitted.';
+				echo '</span>';
 			}
 			return;
 		}
@@ -88,11 +100,10 @@ $(document).ready(function() {
 	'
 		<form method="post" role="form">
 	';
-	$endtime = $user->GetStartTime() + 10800;
-	
-	$num = $questions->GetNumQuestions(1);		
-	$setid = 1;
-	$userid = $_SESSION['user_id'];
+	$endtime = $user->GetStartTime() + 10800;		
+	$setid = $user->GetQuestionSet();
+	$num = $questions->GetNumQuestions($setid);	
+	$userid = $user->GetUserId();
 	
 	$submitted = false;
 	for ($i=0; $i<$num; $i++)
@@ -103,8 +114,8 @@ $(document).ready(function() {
 		
 	if ($submitted) {
 		echo '
-		<div class="container">
-			<h1>Your answers are submitted.</h1>
+		<div class="container" style="font-size:20px;">
+			Your answers are submitted.
 		</div>
 		';
 		return;
@@ -168,6 +179,7 @@ $loginPage->EndBody();
 var TimeLimit = new Date('<?php echo date('r', $endtime) ?>');
 function countdownto() {
 	  var date = Math.round((TimeLimit-new Date())/1000);
+	  if (date<=0){$("#submit").click();}
 	  var hours = Math.floor(date/3600);
 	  date = date - (hours*3600);
 	  var mins = Math.floor(date/60);
@@ -176,7 +188,6 @@ function countdownto() {
 	  if (hours<10) hours = '0'+hours;
 	  if (mins<10) mins = '0'+mins;
 	  if (secs<10) secs = '0'+secs;
-	  if (date<=0){$("#submit").click();}
 	  $("#timer").text(hours+':'+mins+':'+secs);
 	  setTimeout("countdownto()",1000);
  }
@@ -187,7 +198,7 @@ $(document).ready(function() {
 	countdownto();
 	<?php
 	for ($i=0; $i<$num; $i++)
-	echo '$(\'input[name="optionsRadios'.$i.'"]\').change( function() {$(this).closest(".panel-body").css( "background-color", "#cdc" ); var j = parseInt($(this).val()); answer('.($i+1).', j);});';
+	echo '$(\'input[name="optionsRadios'.$i.'"]\').change( function() {$(this).closest(".panel-body").css( "background-color", "#edf3f1" ); var j = parseInt($(this).val()); answer('.($i+1).', j);});';
 	?>});
 
 function answer(sn, option)

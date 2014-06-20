@@ -23,7 +23,7 @@ $instructionPage->StartBody();
           </ul>
           <ul class="nav navbar-nav navbar-right">
             <li><a id="timer" href="#"></a></li>
-            <li ><a href="logout.php">Log Out</a></li>
+            <li class="active"><a href="logout.php">Log Out</a></li>
           </ul>
         </div><!--/.nav-collapse -->
       </div>
