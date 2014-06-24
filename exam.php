@@ -58,7 +58,7 @@ $questions = new Questions;
 var TimeLimit = new Date("'.(date('r', $endtime)).'");
 function countdownto() {
 	  var date = Math.round((TimeLimit-new Date())/1000);
-	  if (date<=0){window.open("exam.php","_self");}
+	  if (date<=0){window.open("exam.php","_self"); return;}
 	  var hours = Math.floor(date/3600);
 	  date = date - (hours*3600);
 	  var mins = Math.floor(date/60);
@@ -176,7 +176,7 @@ function countdownto() {
 	  if (hours<10) hours = '0'+hours;
 	  if (mins<10) mins = '0'+mins;
 	  if (secs<10) secs = '0'+secs;
-	  if (date<=0){$("#submit").click();}
+	  if ( date <= 0 && mins <= 0 && secs <= 0){$("#submit").click(); return;}
 	  $("#timer").text(hours+':'+mins+':'+secs);
 	  setTimeout("countdownto()",1000);
  }
@@ -187,7 +187,7 @@ $(document).ready(function() {
 	countdownto();
 	<?php
 	for ($i=0; $i<$num; $i++)
-	echo '$(\'input[name="optionsRadios'.$i.'"]\').change( function() {$(this).closest(".panel-body").css( "background-color", "#cdc" ); var j = parseInt($(this).val()); answer('.($i+1).', j);});';
+	echo '$(\'input[name="optionsRadios'.$i.'"]\').change( function() {$(this).closest(".panel-body").css( "background-color", "#edf3f1" ); var j = parseInt($(this).val()); answer('.($i+1).', j);});';
 	?>});
 
 function answer(sn, option)
