@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Jun 19, 2014 at 06:15 PM
+-- Generation Time: Jun 20, 2014 at 04:27 AM
 -- Server version: 5.6.17
 -- PHP Version: 5.5.12
 
@@ -37,14 +37,19 @@ CREATE TABLE IF NOT EXISTS `answers` (
   KEY `userid` (`userid`,`qid`),
   KEY `userid_2` (`userid`),
   KEY `qid` (`qid`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=5 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=10 ;
 
 --
 -- Dumping data for table `answers`
 --
 
 INSERT INTO `answers` (`id`, `userid`, `qid`, `ans`) VALUES
-(4, 1, 10, 0);
+(4, 1, 10, 0),
+(5, 1, 11, 3),
+(6, 1, 12, 1),
+(7, 1, 14, 2),
+(8, 1, 15, 1),
+(9, 1, 37, 2);
 
 -- --------------------------------------------------------
 
@@ -72,7 +77,8 @@ INSERT INTO `login_attempts` (`user_id`, `time`) VALUES
 (1, '1402916311'),
 (1, '1402916314'),
 (1, '1402916318'),
-(1, '1403170006');
+(1, '1403170006'),
+(1, '1403195095');
 
 -- --------------------------------------------------------
 
@@ -81,12 +87,12 @@ INSERT INTO `login_attempts` (`user_id`, `time`) VALUES
 --
 
 CREATE TABLE IF NOT EXISTS `passages` (
-  `id` int(11) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `qid` int(11) NOT NULL,
   `passage` longtext NOT NULL,
   PRIMARY KEY (`id`),
   KEY `qid` (`qid`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=4 ;
 
 --
 -- Dumping data for table `passages`
@@ -214,7 +220,8 @@ CREATE TABLE IF NOT EXISTS `users` (
   `salt` char(128) NOT NULL,
   `question_set` int(11) NOT NULL,
   `exam_start_time` datetime NOT NULL,
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  KEY `question_set` (`question_set`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=2 ;
 
 --
@@ -222,7 +229,7 @@ CREATE TABLE IF NOT EXISTS `users` (
 --
 
 INSERT INTO `users` (`id`, `username`, `password`, `salt`, `question_set`, `exam_start_time`) VALUES
-(1, 'test_user', '00807432eae173f652f2064bdca1b61b290b52d40e429a7d295d76a71084aa96c0233b82f1feac45529e0726559645acaed6f3ae58a286b9f075916ebf66cacc', 'f9aab579fc1b41ed0c44fe4ecdbfcdb4cb99b9023abb241a6db833288f4eea3c02f76e0d35204a8695077dcf81932aa59006423976224be0390395bae152d4ef', 1, '2014-06-19 19:01:40');
+(1, 'test_user', '00807432eae173f652f2064bdca1b61b290b52d40e429a7d295d76a71084aa96c0233b82f1feac45529e0726559645acaed6f3ae58a286b9f075916ebf66cacc', 'f9aab579fc1b41ed0c44fe4ecdbfcdb4cb99b9023abb241a6db833288f4eea3c02f76e0d35204a8695077dcf81932aa59006423976224be0390395bae152d4ef', 1, '2014-06-20 05:39:50');
 
 --
 -- Constraints for dumped tables
@@ -246,6 +253,12 @@ ALTER TABLE `passages`
 --
 ALTER TABLE `questions`
   ADD CONSTRAINT `questions_ibfk_1` FOREIGN KEY (`setid`) REFERENCES `question_sets` (`setid`);
+
+--
+-- Constraints for table `users`
+--
+ALTER TABLE `users`
+  ADD CONSTRAINT `users_ibfk_1` FOREIGN KEY (`question_set`) REFERENCES `question_sets` (`setid`);
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;

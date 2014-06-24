@@ -71,6 +71,21 @@ class User {
 		}
 	}
 	
+	function GetQuestionSet(){
+		if ($stmt = $this->m_sqli->prepare("SELECT question_set FROM users WHERE id = ? LIMIT 1")) {
+			$stmt -> bind_param('i', $this->m_userid);
+			$stmt -> execute();
+			$stmt -> store_result();
+			$stmt -> bind_result($setid);
+			if ($stmt -> fetch())
+				return $setid;	
+		}
+	}
+	
+	function GetUserId(){
+		return $this->m_userid;
+	}
+		
 	function ExamStarted()
 	{
 		if ($stmt = $this->m_sqli->prepare("SELECT exam_start_time FROM users WHERE id = ? LIMIT 1")) {

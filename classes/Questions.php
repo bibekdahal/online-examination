@@ -44,6 +44,14 @@ class Questions{
 			return $res->num_rows;
 		}
 		return 0;
+	} 
+	public function PrintQuestionSets(){
+		$mysqli = $this->m_sqli;
+		if ($res = $mysqli->query('SELECT setid FROM question_sets')){
+			while($row = $res->fetch_assoc()){
+				echo $row['setid'] . '<br/>';
+			}
+		}
 	}
 	public function GetNumQuestions($setid)
 	{
@@ -180,6 +188,26 @@ class Questions{
 					if ($stmt1->fetch()){
 						return $passage;
 					}		
+					$stmt1->close();
+				}	
+			}		
+			$stmt->close();
+		}
+		return "";
+	}
+	
+	public function AddPassage($setid, $sn, $passage)
+	{
+		$mysqli = $this->m_sqli;
+		if ($stmt = $mysqli->prepare('SELECT qid FROM questions WHERE setid=? AND sn=?')){
+			$stmt->bind_param('ii', $setid, $sn);
+			$stmt->execute();
+			$stmt->store_result();
+			$stmt->bind_result($qid);
+			if ($stmt->fetch()){			
+				if ($stmt1 = $mysqli->prepare('INSERT INTO passages(qid,passage) VALUES(?,?)')){
+					$stmt1->bind_param('is', $qid, $passage);
+					$stmt1->execute();	
 					$stmt1->close();
 				}	
 			}		
