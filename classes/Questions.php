@@ -7,6 +7,26 @@ if (!defined("HOST")){
 	define("DATABASE", "frobi-online-examination");
 }
 
+function deleteDirectory($dir) {
+    if (!file_exists($dir)) {
+        return true;
+    }
+
+    if (!is_dir($dir)) {
+        return unlink($dir);
+    }
+
+    foreach (scandir($dir) as $item) {
+        if ($item == '.' || $item == '..') {
+            continue;
+        }
+
+        if (!deleteDirectory($dir . DIRECTORY_SEPARATOR . $item)) {
+            return false;
+        }
+    }
+    return rmdir($dir);
+}
 
 class Questions{
 	private $m_sqli;	
@@ -34,6 +54,64 @@ class Questions{
 			$stmt->close();	
 		}
 		mkdir($this->imageroot.$imagefolder);
+	}
+
+	public function DeleteQuestionSet($setid){
+		$mysqli = $this->m_sqli;
+
+		if ($stmt=$mysqli->prepare('SELECT qid FROM questions WHERE setid=?')){
+			$stmt->bind_param('i', $setid);
+			$stmt->execute();
+			$stmt->store_result();
+			$stmt->bind_result($qid);
+			while ($stmt->fetch()){
+				$mysqli->query('DELETE FROM answers WHERE qid='.$qid);	
+				$mysqli->query('DELETE FROM passages WHERE qid='.$qid);	
+			}
+			$stmt->close();
+		}
+
+		if ($stmt1=$mysqli->prepare('DELETE FROM questions WHERE setid=?')){
+			$stmt1->bind_param('i', $setid);
+			$stmt1->execute();
+			if ($stmt = $mysqli->prepare('SELECT imagesfolder FROM question_sets WHERE setid=?')){
+				$stmt->bind_param('i', $setid);
+				$stmt->execute();
+				$stmt->store_result();
+				$stmt->bind_result($imagefolder);
+				if ($stmt->fetch()){
+					if (is_dir($this->imageroot.$imagefolder)) deleteDirectory($this->imageroot.$imagefolder);					
+				}			
+				$stmt->close();
+			}
+			if ($stmt = $mysqli->prepare('DELETE FROM question_sets WHERE setid=?')){
+				$stmt->bind_param('i', $setid);
+				$stmt->execute();
+				$stmt->close();
+			}
+			$stmt1->close();
+		}
+	}
+
+	public function DeleteAllSets()
+	{
+		$mysqli = $this->m_sqli;
+		if ($stmt = $mysqli->prepare('SELECT imagesfolder FROM question_sets')){
+			$stmt->execute();
+			$stmt->store_result();
+			$stmt->bind_result($imagefolder);
+			while ($stmt->fetch()){
+				if (is_dir($this->imageroot.$imagefolder)) deleteDirectory($this->imageroot.$imagefolder);					
+			}
+			$stmt->close();
+		}
+			
+		$mysqli->query('DELETE FROM answers');
+		$mysqli->query('DELETE FROM passages');
+		$mysqli->query('DELETE FROM questions');
+		$mysqli->query('DELETE FROM question_sets');
+		$mysqli->query('ALTER TABLE question_sets AUTO_INCREMENT = 1');
+		$mysqli->query('ALTER TABLE questions AUTO_INCREMENT = 1');
 	}
 	
 	public function GetLastSetId() { return $this->m_lastSetId; }
@@ -215,6 +293,51 @@ class Questions{
 		}
 		return "";
 	}	
+
+	public function SetAnswer($setid, $qsn, $option){
+		$mysqli = $this->m_sqli;
+		if ($stmt=$mysqli->prepare('UPDATE questions SET answer=? WHERE setid=? AND sn=?')){
+			$stmt->bind_param('iii', $option, $setid, $qsn);
+			$stmt->execute();
+			$stmt->close();
+		}
+	}
+
+	public function GetCorrectAnswer($setid, $qsn){
+		$mysqli = $this->m_sqli;
+		if ($stmt=$mysqli->prepare('SELECT answer FROM questions WHERE setid=? AND sn=?')){
+			$stmt->bind_param('ii', $setid, $qsn);
+			$stmt->execute();
+			$stmt->store_result();
+			$stmt->bind_result($option);
+			if ($stmt->fetch()) return $option;
+			$stmt->close();
+		}
+		return 0;
+	}
+
+	public function DeleteQuestion($setid, $qsn){
+		$mysqli = $this->m_sqli;
+		$this->DeleteImages($setid, $qsn);
+		if ($stmt=$mysqli->prepare('SELECT qid FROM questions WHERE setid=? AND sn=?')){
+			$stmt->bind_param('ii', $setid, $qsn);
+			$stmt->execute();
+			$stmt->store_result();
+			$stmt->bind_result($qid);
+			while ($stmt->fetch()){
+				$mysqli->query('DELETE FROM answers WHERE qid='.$qid);	
+				$mysqli->query('DELETE FROM passages WHERE qid='.$qid);	
+			}
+			$stmt->close();
+
+			if ($stmt=$mysqli->prepare('DELETE FROM questions WHERE setid=? AND sn=?')){
+				$stmt->bind_param('ii', $setid, $qsn);
+				$stmt->execute();
+				$stmt->close();
+			}
+
+		}
+	}
 	
 	public function DeleteImages($setid, $qsn) {
 		$mysqli = $this->m_sqli;
@@ -248,6 +371,7 @@ class Questions{
 			$stmt->close();
 		}
 	}
+
 	
 	public function AddAnswer($userid, $setid, $qsn, $option){
 		$mysqli = $this->m_sqli;

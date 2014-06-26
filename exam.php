@@ -58,7 +58,7 @@ $questions = new Questions;
 					var TimeLimit = new Date("'.(date('r', $endtime)).'");
 					function countdownto() {
 						  var date = Math.round((TimeLimit-new Date())/1000);
-						  if (date<=0){window.open("exam.php","_self");}
+						  if (date<=0){window.open("exam.php","_self"); return;}
 						  var hours = Math.floor(date/3600);
 						  date = date - (hours*3600);
 						  var mins = Math.floor(date/60);
@@ -102,6 +102,10 @@ $questions = new Questions;
 	';
 	$endtime = $user->GetStartTime() + 10800;		
 	$setid = $user->GetQuestionSet();
+	if ($setid<0) {
+		echo '<span style="font-size:20px;">You have not been assigned any question set.</span>';	
+		return;
+	}
 	$num = $questions->GetNumQuestions($setid);	
 	$userid = $user->GetUserId();
 	
@@ -179,7 +183,7 @@ $loginPage->EndBody();
 var TimeLimit = new Date('<?php echo date('r', $endtime) ?>');
 function countdownto() {
 	  var date = Math.round((TimeLimit-new Date())/1000);
-	  if (date<=0){$("#submit").click();}
+	  if (date<=0){$("#submit").click();return;}
 	  var hours = Math.floor(date/3600);
 	  date = date - (hours*3600);
 	  var mins = Math.floor(date/60);
