@@ -58,7 +58,7 @@ $questions = new Questions;
 					var TimeLimit = new Date("'.(date('r', $endtime)).'");
 					function countdownto() {
 						  var date = Math.round((TimeLimit-new Date())/1000);
-						  if (date<=0){window.open("exam.php","_self"); return;}
+	  if (date<=0){window.open("exam.php","_self"); return;}
 						  var hours = Math.floor(date/3600);
 						  date = date - (hours*3600);
 						  var mins = Math.floor(date/60);
